@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 import fs from "fs";
 
 // 🔐 CONFIG (use GitHub secrets later)
-const KOBO_URL = "https://kf.kobotoolbox.org/api/v2/assets/awP8AEtifYb6MrUTJU9b7T/data/";
+const KOBO_URL = "https://eu.kobotoolbox.org/api/v2/assets/awP8AEtifYb6MrUTJU9b7T/data/";
 const KOBO_TOKEN = process.env.KOBO_TOKEN;
 
 const BASEROW_URL = "https://api.baserow.io/api/database/rows/table/918679/?user_field_names=true";
