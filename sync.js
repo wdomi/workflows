@@ -17,7 +17,7 @@ if (fs.existsSync("last_id.txt")) {
 // 📡 Fetch Kobo data
 const res = await fetch(KOBO_URL, {
   headers: {
-    "Authorization": `Token ${KOBO_TOKEN}`,
+    Authorization: `Token ${KOBO_TOKEN}`,
     "Accept": "application/json"
   }
 });
@@ -26,12 +26,21 @@ const res = await fetch(KOBO_URL, {
 const text = await res.text();
 console.log("RAW RESPONSE:", text);
 
-// ✅ Try parsing manually
+// ✅ Parse JSON safely
 let json;
 try {
   json = JSON.parse(text);
 } catch (e) {
-  throw new Error("Kobo did not return JSON. Check URL + token.");
+  throw new Error("Kobo did not return JSON.");
+}
+
+// ✅ DEFINE submissions (this was missing)
+const submissions = json.results;
+
+// ✅ Handle empty case
+if (!submissions || submissions.length === 0) {
+  console.log("No new submissions.");
+  process.exit(0);
 }
 
 
