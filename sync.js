@@ -17,12 +17,23 @@ if (fs.existsSync("last_id.txt")) {
 // 📡 Fetch Kobo data
 const res = await fetch(KOBO_URL, {
   headers: {
-    Authorization: `Token ${KOBO_TOKEN}`
+    "Authorization": `Token ${KOBO_TOKEN}`,
+    "Accept": "application/json"
   }
 });
 
-const json = await res.json();
-const submissions = json.results;
+// 🔍 Debug response
+const text = await res.text();
+console.log("RAW RESPONSE:", text);
+
+// ✅ Try parsing manually
+let json;
+try {
+  json = JSON.parse(text);
+} catch (e) {
+  throw new Error("Kobo did not return JSON. Check URL + token.");
+}
+
 
 // 🧠 Process only new entries
 let newestId = lastId;
