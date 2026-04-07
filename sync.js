@@ -5,7 +5,7 @@ import fs from "fs";
 const KOBO_URL = "https://eu.kobotoolbox.org/api/v2/assets/awP8AEtifYb6MrUTJU9b7T/data/?format=json";
 const KOBO_TOKEN = process.env.KOBO_TOKEN;
 
-const BASEROW_URL = "https://api.baserow.io/api/database/rows/table/918679/?user_field_names=true";
+const BASEROW_URL = "https://api.baserow.io/api/database/rows/table/918679/";
 const BASEROW_TOKEN = process.env.BASEROW_TOKEN;
 
 // 📥 Load last processed submission
@@ -50,30 +50,34 @@ let newestId = lastId;
 for (const d of submissions) {
   if (lastId && d._id <= lastId) continue;
 
-  const payload = {
-    id: d.field_7969633,
-    river: d.field_7969634,
-    name: d.field_7969635,
-    lat: d.field_7969636,
-    lon: d.field_7969637,
-    elev: d.field_7969638,
-    position: d.field_7969639,
-    dist_from_spring_m: d.field_7969640,
-    dist_from_PdG_m: d.field_7969641,
-    aspect: d.field_7969642,
-    side_going_downriver: d.field_7969643,
-    height_m: d.field_7969644,
-    ladder: d.field_7969645,
-    date_first: d.field_7969646,
-    photo_url: d.field_7969647,
-    status: d.field_7969648,
-    last_active: d.field_7969649,
-    remark: d.field_7969650,
-    created: d.field_7969651,
-    updated: d.field_7969652,
-    pic1: d.field_7969682,
-    pic2: d.field_7969683
-  };
+  let lat = null;
+let lon = null;
+
+if (d.nest_coordinates) {
+  const parts = d.nest_coordinates.split(" ");
+
+  lat = parts[0] || null;
+  lon = parts[1] || null;
+}
+const payload = {
+  field_7969633: d.nest_id,
+  field_7969634: d.river,
+  field_7983573: d.transect,
+  field_7969635: d.nest_name,
+
+  field_7969636: lat,
+  field_7969637: lon,
+
+  field_7969642: d.aspect,
+  field_7969643: d.side_going_downriver,
+  field_7969644: d.height_m,
+  field_7969645: d.ladder_needed,
+  field_7969646: d.Enter_a_date,
+  field_7969648: d.status,
+  field_7969650: d.remark,
+  field_7969682: d.Point_and_shoot_Use_mera_to_take_a_photo,
+  field_7969683: d.Point_and_shoot_Use_mera_to_take_a_photo_001
+};
 
   console.log("Sending:", payload);
 
